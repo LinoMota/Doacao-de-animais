@@ -27,9 +27,7 @@ module.exports = {
         let users = await connection('user')
         .select('*')
         
-        return response.json({
-            users: users
-        })
+        return response.json(users)
     },
 
     async insert(request,response){
@@ -37,15 +35,16 @@ module.exports = {
         let state = "ok";
 
         console.log("inserting : ", request.body)
-        const { name, address, username, contacts } = request.body
+        const { name, address, username, contacts, password } = request.body
         const id = uuidv4()
 
         await connection('user').insert({
             id : id,
             name: name,
+            password : password,
             username: username,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: new Date('dd-mm-yyyy'),
+            updatedAt: new Date('dd-mm-yyyy')
         }).then( async () => {
             //creating address
             address.userId = id;
@@ -75,6 +74,9 @@ module.exports = {
 
         const userId = request.headers.authorization
 
+        if (!request.headers.authorization)
+            return response.status(401).json({ error: "Operation Not permitted." });
+
         const user = await connection('user')
             .where('id', userId)
             .select('id')
@@ -89,7 +91,8 @@ module.exports = {
             .where('id', userId)
             .update({
                 name : name,
-                username : username
+                username : username,
+                updatedAt: new Date()
             })
 
         return response.status(204).send();
@@ -99,6 +102,9 @@ module.exports = {
         console.log("removing :", request.headers.authorization)
 
         const userId = request.headers.authorization;
+
+        if (!request.headers.authorization)
+            return response.status(401).json({ error: "Operation Not permitted." });
 
         const query = await connection('user')
             .where('id', userId)

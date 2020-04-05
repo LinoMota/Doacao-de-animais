@@ -16,6 +16,7 @@ exports.up = function(knex) {
 
             table.string('profileImgPath').nullable()
             table.string('username').notNull()
+            table.string('password').notNull()
             table.string('name').notNull()
 
             // table.string('id_address').notNull()

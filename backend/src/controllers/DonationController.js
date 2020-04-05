@@ -5,31 +5,18 @@ module.exports = {
 
     /*
         {
-            name : "Lino Mota",
-            usename : "linomota0",
-            email : "linomota0@gmail.com",
-            address : {
-                street : "Rua Zas",
-                number : 20,
-                uf : "AM"
-            },
-            contacts : [
-                { 
-                    socialnetwork : "email",
-                    link : this.email
-                }
-            ]
+        "title" : "Cachorro preto",
+        "description" : "doando o negao.",
+        "photo" : ""
         }
     */
 
     async viewAll(request, response) {
         console.log("view all")
-        let users = await connection('donation')
+        let donations = await connection('donation')
             .select('*')
 
-        return response.json({
-            users: users
-        })
+        return response.json(donations)
     },
 
     async insert(request, response) {
@@ -40,6 +27,9 @@ module.exports = {
         const { title, description, photo } = request.body
 
         const userId = request.headers.authorization
+
+        if (!request.headers.authorization)
+            return response.status(401).json({ error: "Operation Not permitted." });
         
         const user = await connection('user')
             .where('id', userId)
@@ -73,6 +63,9 @@ module.exports = {
 
         const donationId = request.headers.authorization
 
+        if (!request.headers.authorization)
+            return response.status(401).json({ error: "Operation Not permitted." });
+
         const donation = await connection('donation')
             .where('id', donationId)
             .select('id')
@@ -87,6 +80,7 @@ module.exports = {
         const { title, description, photo } = request.body
 
         const donationUpdate = { title, description, photo }
+        donationUpdate.updatedAt = new Date()
 
         const update = await connection('donation')
             .where('id', donationId)
