@@ -1,6 +1,46 @@
 const connection = require('../connection')
 const uuidv4 = require('uuid').v4
 
+
+async function validUser(userId){
+    const query = await connection('user')
+        .where('id', userId)
+        .select('id')
+        .first();
+
+    console.log('query result' , query)
+
+    if (query === undefined || query.id != userId)
+        return false;
+
+    return true;
+}
+
+// Gathering info
+
+async function viewAdoptions(userId){
+
+    if (!userId)
+        return response.status(401).json({ error: "Operation Not permitted." })
+
+    const adoptions = await connection('user')
+        .where('user.id', userId).join('donation', 'user.id', '=', 'donation.angel')
+
+    return adoptions
+}
+
+async function viewContacts(userId){
+
+    if (!userId)
+        return response.status(401).json({ error: "Operation Not permitted." })
+
+    const contacts = await connection('contact')
+        .select('socialmedia','link')
+        .where('userId', userId)
+
+    return contacts
+}
+
 module.exports = {
 
     /*
@@ -22,6 +62,7 @@ module.exports = {
         }
     */
 
+
     async viewAll(request,response){
         console.log("view all")
         let users = await connection('user')
@@ -29,6 +70,34 @@ module.exports = {
         
         return response.json(users)
     },
+
+    // Profile
+
+    async viewFullUserData(request, response){
+
+        console.log("viewing :", request.headers.authorization)
+
+        const userId = request.headers.authorization
+        const isValid = await validUser(userId)
+
+        if (!userId || !isValid)
+            return response.status(401).json({ error: "Operation Not permitted." });
+        
+
+        const user = await connection('user')
+            .select('user.*', 'address.street', 'address.number', 'address.uf')
+            .where('id', userId).join('address','user.id','=','address.userId').first()
+
+        const contacts = await viewContacts(userId)
+
+        const adoptions = await viewAdoptions(userId)
+
+        Object.assign(user,{contacts,adoptions})
+
+        return response.json(user);
+    },
+
+    // CRUD
 
     async insert(request,response){
 
@@ -43,8 +112,8 @@ module.exports = {
             name: name,
             password : password,
             username: username,
-            createdAt: new Date('dd-mm-yyyy'),
-            updatedAt: new Date('dd-mm-yyyy')
+            createdAt: new Date(),
+            updatedAt: new Date()
         }).then( async () => {
             //creating address
             address.userId = id;
@@ -74,15 +143,7 @@ module.exports = {
 
         const userId = request.headers.authorization
 
-        if (!request.headers.authorization)
-            return response.status(401).json({ error: "Operation Not permitted." });
-
-        const user = await connection('user')
-            .where('id', userId)
-            .select('id')
-            .first();
-
-        if (user.id != userId)
+        if (!userId && validUser(userId))
             return response.status(401).json({ error: "Operation Not permitted." });
 
         const { name, username  } = request.body
@@ -103,20 +164,14 @@ module.exports = {
 
         const userId = request.headers.authorization;
 
-        if (!request.headers.authorization)
-            return response.status(401).json({ error: "Operation Not permitted." });
-
-        const query = await connection('user')
-            .where('id', userId)
-            .select('id')
-            .first();
-
-        if (query.id != userId) 
+        if (!userId || validUser(userId) ) 
             return response.status(401).json({ error: "Operation Not permitted." });
         
 
         const exec = await connection('user').where('id', userId).delete();
 
         return response.status(204).send();
-    }
+    },
+
+    
 }
