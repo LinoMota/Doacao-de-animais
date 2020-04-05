@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare" : "rm ./src/database/*.* && npx knex migrate:down --all && npx knex migrate:latest ",
     "start": "nodemon ./src/index"
   },
   "author": "Gabriel Meneses, Lino Mota",

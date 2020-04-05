@@ -34,14 +34,11 @@ module.exports = {
 
     async insert(request,response){
 
-
         let state = "ok";
 
         console.log("inserting : ", request.body)
         const { name, address, username, contacts } = request.body
         const id = uuidv4()
-
-        console.log(20,id)
 
         await connection('user').insert({
             id : id,
