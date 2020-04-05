@@ -10,19 +10,17 @@
 
 exports.up = function(knex) {
     return knex.schema.createTable('user', (table) => {
-            table.increments('id').primary()
+            table.string('id').primary()
             table.dateTime('createdAt').notNull()
             table.dateTime('updatedAt').nullable()
-            table.dateTime('deletedAt').nullable()
 
-            table.string('profile_img_path').nullable()
+            table.string('profileImgPath').nullable()
             table.string('username').notNull()
+            table.string('name').notNull()
 
-            table.string('id_address').notNull()
-            table.string('id_contact').notNull()
+            // table.string('id_address').notNull()
 
-            table.foreign('id_address').references('address.id')
-            table.foreign('id_contact').references('contact.id')
+            // table.foreign('id_address').references('address.id')
         })
 };
 

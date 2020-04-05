@@ -12,9 +12,11 @@
 
 exports.up = function(knex) {
     return knex.schema.createTable('contact', (table) => {
-        table.string('id').primary()
+        table.string('userId')
         table.string('socialmedia')
         table.string('link')
+
+        table.foreign('userId').references('user.id')
     })
 };
 

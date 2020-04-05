@@ -4,7 +4,10 @@ const UserController = require('./controllers/UserController')
 
 const router = express.Router()
 
-router.put('/user/cadastrar', UserController.insert)
+router.get('/user/all', UserController.viewAll)
+router.post('/user/insert', UserController.insert)
+router.put('/user/update', UserController.update)
+router.delete('/user/delete', UserController.delete)
 
 router.get('/', function (request, response) {
     return response.json({
