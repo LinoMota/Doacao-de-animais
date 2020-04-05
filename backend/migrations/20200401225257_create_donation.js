@@ -15,11 +15,11 @@ exports.up = function(knex) {
         table.string('id').primary()
         table.dateTime('createdAt').notNull()
         table.dateTime('updatedAt').nullable()
-        table.dateTime('deletedAt').nullable()
 
-        table.string('title',40).notNull()
-        table.string('photo',400)
-        table.string('status',1)
+        table.string('title').notNull()
+        table.string('description').notNull()
+        table.string('photo').nullable()
+        table.string('status',1).notNull()
 
         table.string('id_user').notNull()
         table.string('angel').nullable()

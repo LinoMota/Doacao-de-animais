@@ -8,7 +8,7 @@
     "prepare" : "rm ./src/database/*.* && npx knex migrate:down --all && npx knex migrate:latest ",
     "start": "nodemon ./src/index"
   },
-  "author": "Gabriel Meneses, Lino Mota",
+  "author": "Lino Mota & Gabriel Meneses",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
