@@ -55,9 +55,9 @@ Authors : Lino Mota & Gabriel Meneses
 
 EOF
 
-echo "1) full installation/reeinstalation Please run this option once"
+echo "1) full installation/reeinstallation Please run this option once"
 echo "2) only packages"
-echo "3) only knex database"
+echo "3) only knex for database"
 echo "4) exit"
 
 echo "Enter your option"
