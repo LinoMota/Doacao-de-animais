@@ -1,11 +1,8 @@
 const uuidv4 = require('uuid').v4
 
 exports.seed = function(knex) {
-  // Deletes ALL existing entries
   return knex('donation').del()
     .then( async () => {
-      // Inserts seed entries
-
       const userList = await knex('user').select('id')
       const randUser = () => userList[Math.floor(userList.length * Math.random())].id;
 

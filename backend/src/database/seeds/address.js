@@ -1,11 +1,8 @@
 
 exports.seed = function(knex) {
-  // Deletes ALL existing entries
   return knex('address').del()
     .then(async () => {
-
       const users = await knex('user').select('id')
-      // Inserts seed entries
       return knex('address').insert([
         {
           userId: users[0].id,
