@@ -4,9 +4,10 @@
 exports.up = function(knex) {
     return knex.schema.createTable('address', (table) => {
         table.string('userId').notNull()
-        table.string('street')
-        table.string('number')
-        table.string('uf')
+        table.string('neighborhood').notNull()
+        table.string('street').notNull()
+        table.string('number').notNull()
+        table.string('uf').notNull()
 
         table.foreign('userId').references('user.id')
     })

@@ -21,10 +21,10 @@ exports.up = function(knex) {
         table.string('photo').nullable()
         table.string('status',1).notNull()
 
-        table.string('id_user').notNull()
+        table.string('userId').notNull()
         table.string('angel').nullable()
 
-        table.foreign('id_user').references('user.id')
+        table.foreign('userId').references('user.id')
         table.foreign('angel').references('user.id')
         
     })

@@ -1,6 +1,6 @@
 
 // CREATE TABLE user(
-//     id VARCHAR(40),
+//     id VARCHAR,
 //     profile_image VARCHAR(300),
 //     username VARCHAR(250) NOT NULL,
 //     email VARCHAR(250) NOT NULL,
@@ -12,7 +12,7 @@ exports.up = function(knex) {
     return knex.schema.createTable('user', (table) => {
             table.string('id').primary()
             table.dateTime('createdAt').notNull()
-            table.dateTime('updatedAt').nullable()
+            table.dateTime('updatedAt').notNull()
 
             table.string('profileImgPath').nullable()
             table.string('username').notNull()

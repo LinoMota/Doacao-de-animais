@@ -17,9 +17,7 @@ router.put('/user/update', UserController.update)
 router.delete('/user/delete', UserController.delete)
 
 router.get('/', function (request, response) {
-    return response.json({
-        "status": "meu deus"
-    })
+    return response.send("<h1>OK deu bom</h1>")
 })
 
 module.exports = router;
